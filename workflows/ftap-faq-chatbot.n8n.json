@@ -1,0 +1,222 @@
+{
+  "id": "ftap-ai-chatbot",
+  "name": "FTAP AI Chatbot",
+  "nodes": [
+    {
+      "id": "f2af12df-0814-4094-ba48-0a21f165f0e1",
+      "name": "Sticky Note f2af12df",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -50,
+        -50
+      ],
+      "parameters": {
+        "content": "## FTAP AI Chatbot PoC\nPOST from .NET MAUI to `/webhook-test/ftap-faq-chat` while testing or `/webhook/ftap-faq-chat` after activation.\n\nPayload: `{ \"message\": \"What is the iAMS PIN code?\", \"sessionId\": \"demo-1\" }`.\n\nFinal answers are returned exactly from the extracted PDF FAQ. OpenAI can be used for route/grounding metadata when `OPENAI_API_KEY` is set.",
+        "color": 4,
+        "width": 300,
+        "height": 200
+      }
+    },
+    {
+      "id": "e6aeeb11-a2d0-45d8-b12e-ee8f13e78231",
+      "name": "Webhook - MAUI FAQ Chat",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        80
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ftap-faq-chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookId": "b2bf0ed1-0841-4294-a457-36cbb26ff8a3"
+    },
+    {
+      "id": "d757a3f5-d8b5-4b9b-b7c9-24a5abd54156",
+      "name": "Find FAQ Answer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        80
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const body = $json.body ?? $json;\nconst env = typeof $env === \"undefined\" ? {} : $env;\nconst faq = [{\"number\":1,\"question\":\"What are the credentials needed for the registration on the iAMS Mobile App?\",\"answer\":\"Choose Acsys Mobile iAMS from the available list. Click Select Cloud and choose Custom, switch the tab to https and enter below details. Click register, OTP will be received enter it, enter your Password, and click register you’ll be registered successfully.\\nKindly input these details:\\nCloud ID: ftaprelay.frontiertowersphilippines.com\\nServer ID: ftapiams\\nUse registered email address.\"},{\"number\":2,\"question\":\"What is the PIN Code on the iAMS Mobile App?\",\"answer\":\"1234\"},{\"number\":3,\"question\":\"Where to message if there is a need for an emergency access?\",\"answer\":\"Strictly for Direct Messages Only\\n∙  FTAP Site Access No.:  09177149799 (WhatsApp)\\n∙  FTAP Site Access No.:  09992293099 (WhatsApp)\"},{\"number\":4,\"question\":\"Where to call if there is a need of an emergency access after office hours, weekends, and holidays?\",\"answer\":\"∙  Site Access Landline No. - (02) 82504659\\n∙  Site Access Globe Hotline No. - 180015500101\"},{\"number\":5,\"question\":\"What should we do if we receive an error of “No Access Right on specified Asset Point”\",\"answer\":\"Kindly check first if your ticket has been approved and if the registered personnel’s area of responsibility has been updated on the User’s geography.\\nIf all these are correct and issue persist, kindly coordinate with the FTAP WhatsApp hotline and send the screenshot.\"},{\"number\":6,\"question\":\"Where to send inquiries, requests, or escalations?\",\"answer\":\"For GLOBE customers:  globesiteaccess@frontiertowersphilippines.com\"},{\"number\":7,\"question\":\"How to add vendor organization on iAMS Web Portal?\",\"answer\":\"Kindly email us the details of the vendor organization.\\nFor Add Organization,\\nPlease fill the details below:\\nVendor Name:\\nVendor Contact Person:\\nVendor Email:\\nVendor Contact Number:\"},{\"number\":8,\"question\":\"What to do if tickets cannot be found on the ticket list or on the iAMS web portal?\",\"answer\":\"Re-file or create another work order/ticket number and email us for approval.\"},{\"number\":9,\"question\":\"Who to call if the site as an issue with the lessor?\",\"answer\":\"FTAP Estate Management\\n•   North NCR and North Luzon: 0905 558 0676\\n•   South NCR and South Luzon: 0998 571 5446\\n•   Visayas Area: 0968 897 2421\\n•   Mindanao Area: 0961 709 3036\"},{\"number\":10,\"question\":\"What to do if we need to use the ticket again for the access?\",\"answer\":\"Kindly remind the team to uncheck the “CLOSE TICKET” box. Afterwards, go to Menu > Ticket list, and click “REOPEN” so that they can reuse the ticket until its validity date. Maximum validity of access ticket is 10 days. Request a new ticket access if the activity would go beyond the 10 days.\"},{\"number\":11,\"question\":\"What do we need to upload on the shared OneDrive?\",\"answer\":\"For new registration:\\n-      Company ID\\n-      Working at Height certificate (WAH)\\n-      Certificate of Employment (COE)\\n-      NBI Clearance\\nFor access request:\\n-      MOP/SOW (Detailed information of activity)\\n-      RAAWA (Globe)\"},{\"number\":12,\"question\":\"Why can’t we request access for installation and dismantling activities?\",\"answer\":\"You need to provide the approved change request application number.\"},{\"number\":13,\"question\":\"Why can't we request access for pullout activities?\",\"answer\":\"Fill out the FTAP Extraction Form, complete all details and have it signed to your authorized signatories. Email the form to Site Access Team and they will route it for approval internally. Once approved, you may now file for work order/ticket access.\"},{\"number\":14,\"question\":\"What should we do if we receive an error of “Not Able to Connect on Relay Server” or “Server is Busy”?\",\"answer\":\"Kindly check if you’re using the new mobile application.\\nIf all these are correct and issue persist, kindly coordinate with the FTAP WhatsApp hotline and send the screenshot for further analysis.\"},{\"number\":15,\"question\":\"What should we do if we receive an error of \\\"Check-in successful for asset point. Asset point already opened. Please proceed to work\\\"\",\"answer\":\"Kindly coordinate with the FTAP WhatsApp hotline and send the screenshot for further analysis.\"},{\"number\":16,\"question\":\"What should we do if we receive an error of \\\" Could not able to find Access Point - Try again\\\"\",\"answer\":\"Kindly coordinate with the FTAP WhatsApp hotline and send the screenshot for further analysis.\"},{\"number\":17,\"question\":\"What should we do if we receive an error of \\\" The previous site not close yet, cannot request another site before closing it\\\"\",\"answer\":\"Kindly coordinate with the FTAP WhatsApp hotline and send the screenshot for further analysis.\"}];\nconst source = {\"title\":\"FTAP Site Access Management System FAQs\",\"sourceDocument\":\"3. FTAP SAM System FAQs. 2025 (GLOBE).pdf\",\"audience\":\"GLOBE customers\",\"effectiveDate\":\"January 2026\"};\n\nfunction firstDefined(...values) {\n  return values.find((value) => value !== undefined && value !== null && String(value).trim() !== \"\");\n}\n\nfunction normalize(value) {\n  return String(value ?? \"\")\n    .toLowerCase()\n    .replace(/[^a-z0-9]+/g, \" \")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nconst stopWords = new Set([\"a\", \"an\", \"and\", \"are\", \"as\", \"do\", \"for\", \"how\", \"if\", \"is\", \"it\", \"of\", \"on\", \"or\", \"that\", \"the\", \"this\", \"to\", \"we\", \"what\", \"when\", \"where\", \"who\", \"why\", \"with\"]);\nconst inScopeTokens = new Set([\"access\", \"acsys\", \"app\", \"approval\", \"approved\", \"area\", \"asset\", \"busy\", \"certificate\", \"check\", \"checkin\", \"clearance\", \"cloud\", \"coe\", \"code\", \"company\", \"connect\", \"credentials\", \"dismantling\", \"email\", \"emergency\", \"employment\", \"escalations\", \"extraction\", \"find\", \"ftap\", \"geography\", \"globe\", \"hotline\", \"iams\", \"inquiries\", \"installation\", \"landline\", \"lessor\", \"mobile\", \"mop\", \"nbi\", \"onedrive\", \"organization\", \"otp\", \"password\", \"pin\", \"portal\", \"pullout\", \"raawa\", \"registration\", \"relay\", \"reopen\", \"requests\", \"server\", \"site\", \"sow\", \"ticket\", \"upload\", \"vendor\", \"wah\", \"whatsapp\", \"work\"]);\nconst inScopePhrases = [\"after office\", \"asset point\", \"check in\", \"check-in\", \"close ticket\", \"could not able to find\", \"no access right\", \"not able to connect\", \"previous site\", \"server is busy\", \"specified asset point\", \"ticket list\", \"work order\"];\n\nfunction tokenize(value) {\n  return normalize(value)\n    .split(\" \")\n    .filter((token) => token.length > 1 && !stopWords.has(token));\n}\n\nfunction scoreEntry(question, entry) {\n  const queryTokens = tokenize(question);\n  const haystack = new Set(tokenize(entry.question + \" \" + entry.answer));\n  const titleTokens = new Set(tokenize(entry.question));\n  let score = 0;\n\n  for (const token of queryTokens) {\n    if (haystack.has(token)) score += titleTokens.has(token) ? 3 : 1;\n  }\n\n  const haystackText = normalize(entry.question + \" \" + entry.answer);\n  const normalizedQuestion = normalize(question);\n  if (normalizedQuestion === normalize(entry.question)) score += 100;\n  if (normalizedQuestion.includes(\"pin\") && normalize(entry.question).includes(\"pin\")) score += 6;\n  if (normalizedQuestion.includes(\"emergency\") && haystackText.includes(\"emergency\")) score += 4;\n  if (normalizedQuestion.includes(\"whatsapp\") && haystackText.includes(\"whatsapp\")) score += 4;\n  if (normalizedQuestion.includes(\"no access right\") && entry.number === 5) score += 30;\n  if (normalizedQuestion.includes(\"specified asset point\") && entry.number === 5) score += 30;\n  if (normalizedQuestion.includes(\"onedrive\") && haystackText.includes(\"onedrive\")) score += 5;\n  if (normalizedQuestion.includes(\"relay\") && haystackText.includes(\"relay\")) score += 5;\n  if (normalizedQuestion.includes(\"not able to connect\") && entry.number === 14) score += 30;\n  if (normalizedQuestion.includes(\"server is busy\") && entry.number === 14) score += 30;\n  if (normalizedQuestion.includes(\"lessor\") && haystackText.includes(\"lessor\")) score += 5;\n  if (normalizedQuestion.includes(\"reopen\") && haystackText.includes(\"reopen\")) score += 5;\n  if (normalizedQuestion.includes(\"pullout\") && haystackText.includes(\"pullout\")) score += 5;\n  if (normalizedQuestion.includes(\"installation\") && haystackText.includes(\"installation\")) score += 5;\n  if (normalizedQuestion.includes(\"dismantling\") && haystackText.includes(\"dismantling\")) score += 5;\n\n  return { entry, score, queryTokenCount: Math.max(queryTokens.length, 1) };\n}\n\nfunction isInScopeQuestion(question) {\n  const normalizedQuestion = normalize(question);\n  if (!normalizedQuestion) return false;\n  if (faq.some((entry) => normalize(entry.question) === normalizedQuestion)) return true;\n  if (faq.some((entry) => normalizedQuestion === String(entry.number) || normalizedQuestion === \"faq \" + entry.number)) return true;\n  if (inScopePhrases.some((phrase) => normalizedQuestion.includes(phrase))) return true;\n  return tokenize(normalizedQuestion).some((token) => inScopeTokens.has(token));\n}\n\nconst question = String(firstDefined(body.message, body.question, body.text, body.prompt, \"\")).trim();\nconst sessionId = String(firstDefined(body.sessionId, body.session_id, body.conversationId, \"maui-demo\"));\nconst topMatches = faq\n  .map((entry) => scoreEntry(question, entry))\n  .sort((a, b) => b.score - a.score)\n  .slice(0, 3);\n\nconst best = topMatches[0];\nconst confidence = question && best ? Math.min(0.98, Number((best.score / Math.max(best.queryTokenCount * 3, 1)).toFixed(2))) : 0;\nconst hasAnswer = Boolean(question && best && best.score > 0 && isInScopeQuestion(question));\nconst fallbackAnswer = \"I can only answer questions covered by the FTAP SAM FAQ knowledge base. Please ask about iAMS registration, PIN, emergency access, tickets, OneDrive uploads, relay/server errors, lessor/site access, or other FTAP site access FAQ topics.\";\nconst localAnswer = hasAnswer ? best.entry.answer : fallbackAnswer;\nconst suggestions = faq.slice(0, 5).map((entry) => entry.question);\nconst useOpenAI = Boolean(env.OPENAI_API_KEY && !String(env.OPENAI_API_KEY).startsWith(\"sk-replace\"));\n\nconst context = topMatches\n  .filter((match) => hasAnswer && match.score > 0)\n  .map((match) => ({\n    number: match.entry.number,\n    question: match.entry.question,\n    answer: match.entry.answer,\n    score: match.score\n  }));\n\nconst response = {\n  sessionId,\n  answer: localAnswer,\n  confidence,\n  source: \"local-faq\",\n  matchedFaq: hasAnswer ? {\n    number: best.entry.number,\n    question: best.entry.question,\n    score: best.score\n  } : null,\n  citations: context.map((match) => ({\n    number: match.number,\n    question: match.question\n  })),\n  suggestedQuestions: hasAnswer ? [] : suggestions,\n  generatedAt: new Date().toISOString()\n};\n\nconst openAiRequest = {\n  model: env.OPENAI_MODEL || \"gpt-4o-mini\",\n  instructions: [\n    \"You are an FTAP Site Access FAQ assistant for GLOBE users.\",\n    \"Use only the supplied FAQ context to identify the best matching FAQ item.\",\n    \"Return a concise confirmation of the FAQ number and do not add procedures, contacts, credentials, or ticket rules.\",\n    \"The workflow will return the exact PDF answer text from the matched FAQ item; do not rewrite the answer.\"\n  ].join(\"\\n\"),\n  input: [\n    {\n      role: \"user\",\n      content: [\n        {\n          type: \"input_text\",\n          text: JSON.stringify({\n            question,\n            source,\n            faq_context: context,\n            local_fallback_answer: localAnswer\n          })\n        }\n      ]\n    }\n  ],\n  temperature: 0.1,\n  max_output_tokens: 500\n};\n\nreturn [{\n  json: {\n    question,\n    sessionId,\n    response,\n    useOpenAI: useOpenAI && hasAnswer,\n    openAiRequest,\n    faqContext: context\n  }\n}];"
+      }
+    },
+    {
+      "id": "44baae18-8539-4663-b49d-8d2480f4631a",
+      "name": "IF - Use OpenAI?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        80
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.useOpenAI }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "8c64476e-0b2a-4ef9-b75f-e30b24999e31",
+      "name": "OpenAI - Route FAQ Answer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        672,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/responses",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $env.OPENAI_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.openAiRequest }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "retryOnFail": true
+    },
+    {
+      "id": "504269e5-bca1-4a5d-8f03-29a5b5c4f716",
+      "name": "Format OpenAI Answer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const base = $(\"Find FAQ Answer\").first().json;\nconst response = $input.first().json;\n\nfunction getText(resp) {\n  if (typeof resp?.output_text === \"string\") return resp.output_text;\n  if (Array.isArray(resp?.output)) {\n    for (const output of resp.output) {\n      if (Array.isArray(output?.content)) {\n        for (const content of output.content) {\n          if (typeof content?.text === \"string\") return content.text;\n        }\n      }\n    }\n  }\n  if (typeof resp?.choices?.[0]?.message?.content === \"string\") {\n    return resp.choices[0].message.content;\n  }\n  return \"\";\n}\n\nconst modelAnswer = response?.error ? \"\" : getText(response).trim();\nconst errorMessage = response?.error?.message || \"\";\n\nreturn [{\n  json: {\n    ...base,\n    openAiRaw: response,\n    response: {\n      ...base.response,\n      answer: base.response.answer,\n      source: modelAnswer ? \"openai-grounded-faq-exact\" : \"local-faq\",\n      openAi: {\n        used: Boolean(modelAnswer),\n        mode: \"route-only-exact-pdf-answer\",\n        error: errorMessage\n      }\n    }\n  }\n}];"
+      }
+    },
+    {
+      "id": "48821596-6850-4c94-83f2-7f91383fc696",
+      "name": "Respond to MAUI",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1120,
+        80
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.response }}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook - MAUI FAQ Chat": {
+      "main": [
+        [
+          {
+            "node": "Find FAQ Answer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find FAQ Answer": {
+      "main": [
+        [
+          {
+            "node": "IF - Use OpenAI?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Use OpenAI?": {
+      "main": [
+        [
+          {
+            "node": "OpenAI - Route FAQ Answer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to MAUI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI - Route FAQ Answer": {
+      "main": [
+        [
+          {
+            "node": "Format OpenAI Answer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format OpenAI Answer": {
+      "main": [
+        [
+          {
+            "node": "Respond to MAUI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

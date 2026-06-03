@@ -1,0 +1,20 @@
+**/bin/
+**/obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.tmp
+
+# Local verification artifacts
+mobile/*.png
+mobile/*.xml
+mobile/*.log
+mobile/*.out.log
+mobile/*.err.log
+mobile/launch-logcat.txt
+
+# Secrets and local environment files
+.env
+.env.*
+!.env.example

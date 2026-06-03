@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FtapFaqChatbot.FtapFaqChatPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="FTAP AI Chatbot">
+
+    <Grid Padding="20" RowDefinitions="*,Auto" RowSpacing="16">
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Spacing="12">
+                <Label
+                    x:Name="AnswerLabel"
+                    FontSize="16"
+                    LineBreakMode="WordWrap"
+                    Text="Ask an FTAP site access question." />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="10">
+            <Entry
+                x:Name="QuestionEntry"
+                Grid.Column="0"
+                Placeholder="Question"
+                ReturnType="Send"
+                Completed="OnQuestionCompleted" />
+            <Button
+                Grid.Column="1"
+                Text="Ask"
+                Clicked="OnAskClicked" />
+        </Grid>
+    </Grid>
+</ContentPage>

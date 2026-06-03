@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FtapFaqChatbot.Mobile.HomePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="#FFF7F1">
+
+    <Grid
+        Padding="18,20,18,18"
+        BackgroundColor="#FFF7F1">
+        <ImageButton
+            WidthRequest="74"
+            HeightRequest="74"
+            Margin="0,0,0,6"
+            Padding="0"
+            Aspect="AspectFit"
+            BackgroundColor="Transparent"
+            Clicked="OnChatFabClicked"
+            CornerRadius="38"
+            HorizontalOptions="End"
+            SemanticProperties.Description="Open FTAP FAQ Chatbot"
+            Source="chatbot_fab.png"
+            VerticalOptions="End">
+            <ImageButton.Shadow>
+                <Shadow
+                    Brush="#8C3A15"
+                    Offset="0,6"
+                    Opacity="0.24"
+                    Radius="16" />
+            </ImageButton.Shadow>
+        </ImageButton>
+    </Grid>
+</ContentPage>
